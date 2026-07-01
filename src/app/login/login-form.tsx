@@ -28,7 +28,7 @@ export function LoginForm({ initialNext }: FormProps) {
   }, [demo]);
 
   return (
-    <div className="rounded-2xl border border-[#142a55]/8 bg-white p-6 shadow-[0_8px_40px_-12px_rgba(20,42,85,0.18)] sm:p-8">
+    <div className="rounded-2xl border border-eyabantu-gold/25 bg-white p-6 shadow-[0_8px_40px_-12px_rgba(29,38,81,0.12)] sm:p-8">
       <div className="flex items-center justify-between gap-3">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Staff sign in</p>
         <button
@@ -36,7 +36,7 @@ export function LoginForm({ initialNext }: FormProps) {
           onClick={() => setDemo((d) => !d)}
           className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition ${
             demo
-              ? "bg-[#fff8ef] text-[#f18a00] ring-1 ring-[#f18a00]/25"
+              ? "bg-brand-soft text-eyabantu-gold ring-1 ring-eyabantu-gold/25"
               : "bg-slate-100 text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
           }`}
         >
@@ -49,7 +49,7 @@ export function LoginForm({ initialNext }: FormProps) {
         <input type="hidden" name="next" value={initialNext ?? ""} />
 
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#142a55]">
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-eyabantu-navy">
             Email address
           </label>
           <input
@@ -61,12 +61,12 @@ export function LoginForm({ initialNext }: FormProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="name@eyabantu-funerals.co.za"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#142a55] outline-none transition placeholder:text-slate-400 focus:border-[#142a55] focus:ring-2 focus:ring-[#142a55]/10"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-eyabantu-navy outline-none transition placeholder:text-slate-400 focus:border-eyabantu-navy focus:ring-2 focus:ring-eyabantu-navy/10"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-[#142a55]">
+          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-eyabantu-navy">
             Password
           </label>
           <input
@@ -77,7 +77,7 @@ export function LoginForm({ initialNext }: FormProps) {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#142a55] outline-none transition focus:border-[#142a55] focus:ring-2 focus:ring-[#142a55]/10"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-eyabantu-navy outline-none transition focus:border-eyabantu-navy focus:ring-2 focus:ring-eyabantu-navy/10"
           />
         </div>
 
@@ -88,7 +88,7 @@ export function LoginForm({ initialNext }: FormProps) {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-[#f18a00] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e07d00] focus:outline-none focus:ring-2 focus:ring-[#f18a00]/40 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-eyabantu-gold px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-eyabantu-gold-light focus:outline-none focus:ring-2 focus:ring-eyabantu-gold/40 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "Signing in…" : "Sign in"}
         </button>
@@ -97,7 +97,7 @@ export function LoginForm({ initialNext }: FormProps) {
       <button
         type="button"
         onClick={() => setShowDemoHelp((v) => !v)}
-        className="mt-5 flex w-full items-center justify-center gap-1.5 text-xs font-medium text-slate-500 transition hover:text-[#142a55]"
+        className="mt-5 flex w-full items-center justify-center gap-1.5 text-xs font-medium text-slate-500 transition hover:text-eyabantu-navy"
       >
         Demo login details
         <ChevronDown className={`h-3.5 w-3.5 transition ${showDemoHelp ? "rotate-180" : ""}`} aria-hidden />
@@ -107,14 +107,14 @@ export function LoginForm({ initialNext }: FormProps) {
         <div className="mt-3 space-y-3 rounded-xl border border-slate-100 bg-slate-50/80 p-4">
           <p className="text-xs text-slate-600">
             Password for all demo accounts:{" "}
-            <span className="font-mono font-bold text-[#142a55]">{DEMO_PASSWORD}</span>
+            <span className="font-mono font-bold text-eyabantu-navy">{DEMO_PASSWORD}</span>
           </p>
           <div className="flex flex-wrap gap-1.5">
             {DEMO_ACCOUNTS.map((a) => (
               <button
                 key={a.email}
                 type="button"
-                className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-[#142a55] transition hover:border-[#f18a00]/40 hover:text-[#f18a00]"
+                className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-eyabantu-navy transition hover:text-eyabantu-gold"
                 onClick={() => {
                   setEmail(a.email);
                   setPassword(DEMO_PASSWORD);

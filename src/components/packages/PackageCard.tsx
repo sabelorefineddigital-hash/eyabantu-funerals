@@ -6,13 +6,13 @@ const accentStyles = {
     ring: "ring-amber-700/25",
     bg: "from-amber-900/90 via-amber-800 to-amber-950",
     badge: "bg-amber-100 text-amber-950",
-    price: "text-[#f18a00]",
+    price: "text-[#D48E2F]",
   },
   silver: {
     ring: "ring-slate-400/40",
     bg: "from-slate-300 via-slate-200 to-slate-400",
     badge: "bg-slate-100 text-slate-800",
-    price: "text-[#142a55]",
+    price: "text-[#1D2651]",
   },
   gold: {
     ring: "ring-yellow-500/35",
@@ -21,10 +21,10 @@ const accentStyles = {
     price: "text-[#c47f00]",
   },
   navy: {
-    ring: "ring-[#142a55]/25",
-    bg: "from-[#142a55] to-[#0f1f45]",
-    badge: "bg-[#142a55]/10 text-[#142a55]",
-    price: "text-[#142a55]",
+    ring: "ring-[#1D2651]/25",
+    bg: "from-[#1D2651] to-[#0f1f45]",
+    badge: "bg-[#1D2651]/10 text-[#1D2651]",
+    price: "text-[#1D2651]",
   },
 } as const;
 
@@ -75,9 +75,9 @@ function CasketSvg({ tier, className = "h-16 w-20" }: { tier: CasketTier | null;
   }
   return (
     <svg className={className} viewBox="0 0 80 48" fill="none" aria-hidden>
-      <circle cx="40" cy="22" r="12" fill="#142a55" opacity="0.12" />
-      <circle cx="40" cy="18" r="5" fill="#142a55" opacity="0.35" />
-      <path d="M28 32 h24 M34 28 v8 M46 28 v8" stroke="#142a55" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <circle cx="40" cy="22" r="12" fill="#1D2651" opacity="0.12" />
+      <circle cx="40" cy="18" r="5" fill="#1D2651" opacity="0.35" />
+      <path d="M28 32 h24 M34 28 v8 M46 28 v8" stroke="#1D2651" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
       <ellipse cx="40" cy="38" rx="28" ry="3" fill="#000" opacity="0.08" />
     </svg>
   );
@@ -85,12 +85,12 @@ function CasketSvg({ tier, className = "h-16 w-20" }: { tier: CasketTier | null;
 
 function CoverIcon({ pkg }: { pkg: EyabantuPackage }) {
   if (pkg.kind === "ADDON") {
-    return <UserPlus className="h-5 w-5 text-[#142a55]" aria-hidden />;
+    return <UserPlus className="h-5 w-5 text-[#1D2651]" aria-hidden />;
   }
   if (pkg.coverGroup === "SINGLE") {
-    return <User className="h-5 w-5 text-[#142a55]" aria-hidden />;
+    return <User className="h-5 w-5 text-[#1D2651]" aria-hidden />;
   }
-  return <Users className="h-5 w-5 text-[#142a55]" aria-hidden />;
+  return <Users className="h-5 w-5 text-[#1D2651]" aria-hidden />;
 }
 
 type PackageCardProps = {
@@ -108,7 +108,7 @@ export function PackageCard({ pkg, selected, onSelect, compact }: PackageCardPro
       type="button"
       onClick={onSelect}
       className={`group relative flex w-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-left shadow-sm transition hover:shadow-md ${
-        selected ? `border-[#f18a00] ring-2 ring-[#f18a00]/30` : "border-slate-200 hover:border-[#142a55]/25"
+        selected ? `border-[#D48E2F] ring-2 ring-[#D48E2F]/30` : "border-slate-200 hover:border-[#1D2651]/25"
       } ${compact ? "p-3" : "p-4"}`}
     >
       <div className={`flex items-start justify-between gap-2 ${compact ? "" : "mb-3"}`}>
@@ -124,7 +124,7 @@ export function PackageCard({ pkg, selected, onSelect, compact }: PackageCardPro
           <CasketSvg tier={pkg.tier} className={compact ? "h-10 w-14" : "h-12 w-16"} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className={`font-bold leading-snug text-[#142a55] ${compact ? "text-xs" : "text-sm"}`}>{pkg.title}</p>
+          <p className={`font-bold leading-snug text-[#1D2651] ${compact ? "text-xs" : "text-sm"}`}>{pkg.title}</p>
           {!compact ? <p className="mt-0.5 text-[11px] text-slate-500">{pkg.subtitle}</p> : null}
         </div>
       </div>
@@ -133,7 +133,7 @@ export function PackageCard({ pkg, selected, onSelect, compact }: PackageCardPro
         <ul className="mt-3 space-y-1 border-t border-slate-100 pt-3 text-[10px] leading-relaxed text-slate-600">
           {pkg.benefits.slice(0, 3).map((b) => (
             <li key={b} className="flex gap-1.5">
-              <span className="text-[#f18a00]">✓</span>
+              <span className="text-[#D48E2F]">✓</span>
               <span>{b}</span>
             </li>
           ))}

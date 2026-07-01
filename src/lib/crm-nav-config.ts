@@ -8,6 +8,7 @@ import {
   CalendarClock,
   ClipboardList,
   FileSignature,
+  FileText,
   Gauge,
   HeartPulse,
   Landmark,
@@ -38,6 +39,7 @@ export function getOwnerNavGroups(): CrmNavGroup[] {
       label: "Members & policies",
       items: [
         { href: "/owner/members", label: "Members", icon: Users },
+        { href: "/owner/applications", label: "Applications", icon: FileText },
         { href: "/owner/policies", label: "Policies", icon: FileSignature },
         { href: "/owner/accounts", label: "Accounts", icon: Banknote },
         { href: "/owner/packages", label: "Packages", icon: Package },
@@ -83,6 +85,7 @@ export function getStaffNavGroups(access: StaffAccessLevel): CrmNavGroup[] {
   const work: CrmNavItem[] = [];
   if (access === "AGENT" || access === "MANAGEMENT" || access === "ADMINISTRATION") {
     work.push({ href: "/staff/members", label: "Members", icon: Users });
+    work.push({ href: "/staff/applications", label: "Applications", icon: FileText });
   }
   if (access === "AGENT" || access === "MANAGEMENT") {
     work.push({ href: "/staff/policies", label: "Policies", icon: FileSignature });

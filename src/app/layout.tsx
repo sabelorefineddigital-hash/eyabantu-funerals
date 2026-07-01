@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   },
   description:
     "Eyabantu Funerals — CRM and operations workspace for members, claims, and collections.",
+  icons: {
+    icon: "/branding/logo.png",
+    apple: "/branding/logo.png",
+  },
 };
 
 export default function RootLayout({

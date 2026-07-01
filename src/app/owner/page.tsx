@@ -10,6 +10,7 @@ import {
   CrmRevenueBreakdown,
   CrmStatCard,
 } from "@/components/crm/CrmDashboardKit";
+import { EyabantuFlyerStrip } from "@/components/crm/EyabantuFlyerStrip";
 import { Banknote, ClipboardList, HeartPulse, Users } from "lucide-react";
 
 function fmtMoney(n: number) {
@@ -109,11 +110,13 @@ export default async function OwnerHomePage() {
         />
         <Link
           href="/owner/stream"
-          className="shrink-0 text-sm font-semibold text-sky-600 hover:underline md:mb-1"
+          className="shrink-0 text-sm font-semibold text-eyabantu-gold hover:text-eyabantu-navy md:mb-1"
         >
           Open activity stream →
         </Link>
       </div>
+
+      <EyabantuFlyerStrip packagesHref="/owner/packages" />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <CrmStatCard
@@ -159,11 +162,11 @@ export default async function OwnerHomePage() {
         <CrmActivityHeatmap title="Workspace activity (demo)" />
       </div>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      <section className="eyabantu-card p-5 md:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-sm font-semibold text-slate-900">Underwriting & logistics</h2>
-            <p className="mt-1 max-w-xl text-xs text-slate-500">
+            <div className="eyabantu-section-header">Underwriting & logistics</div>
+            <p className="mt-3 max-w-xl text-xs text-muted">
               {applicationsPending} application{applicationsPending === 1 ? "" : "s"} awaiting underwriter gateway.
               Hearses, Sprinters, and chapel allocations stay aligned with driver and staff rosters.
             </p>
@@ -171,20 +174,20 @@ export default async function OwnerHomePage() {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/owner/policies"
-              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-sky-300"
+              className="rounded-lg border border-eyabantu-gold/40 bg-eyabantu-cream px-3 py-2 text-xs font-semibold text-eyabantu-navy hover:border-eyabantu-gold"
             >
               Policies
             </Link>
             <Link
               href="/owner/internal-affairs"
-              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-sky-300"
+              className="rounded-lg border border-eyabantu-gold/40 bg-eyabantu-cream px-3 py-2 text-xs font-semibold text-eyabantu-navy hover:border-eyabantu-gold"
             >
               Internal affairs
             </Link>
           </div>
         </div>
-        <p className="mt-3 text-xs text-slate-500">
-          Collection health (active vs total): <span className="font-semibold text-slate-800">{collectionRate}%</span>
+        <p className="mt-3 text-xs text-muted">
+          Collection health (active vs total): <span className="font-bold text-eyabantu-navy">{collectionRate}%</span>
         </p>
       </section>
 

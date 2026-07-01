@@ -77,6 +77,7 @@ model Tenant {
   activityLogs           ActivityLog[]
   underwriterLinks       UnderwriterLink[]
   paymentGatewaySettings PaymentGatewaySetting[]
+  clientApplications     ClientApplication[]
 }
 
 model User {
@@ -100,6 +101,7 @@ model User {
   policiesCreated  PolicyApplication[] @relation("AgentPolicies")
   complaintsFiled  Complaint[]        @relation("ComplaintReporter")
   expensesApproved Expense[]          @relation("ExpenseApprover")
+  clientApplications ClientApplication[] @relation("SubmittedApplications")
 }
 
 model Member {
@@ -309,4 +311,54 @@ model PaymentGatewaySetting {
   merchantId String?
   passphrase String?
   isSandbox  Boolean @default(true)
+}
+
+model ClientApplication {
+  id                String   @id @default(cuid())
+  tenantId          String
+  tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  submittedById     String?
+  submittedBy       User?    @relation("SubmittedApplications", fields: [submittedById], references: [id])
+  reference         String   @unique
+  status            String   @default("SUBMITTED")
+
+  surname           String
+  firstName         String
+  idNumber          String?
+  employeeNumber    String?
+  employerName      String?
+  maritalStatus     String?
+  email             String?
+  cellphone         String?
+  address           String?
+  addressCode       String?
+  inceptionDate     DateTime?
+  groupBranch       String?
+
+  packageCode       String?
+  addonCodes        String?
+  extendedPremium   Float    @default(0)
+  totalPremium      Float    @default(0)
+
+  accountHolder     String?
+  accountNumber     String?
+  bankName          String?
+  branchName        String?
+  branchCode        String?
+  accountType       String?
+  debitDay          String?
+
+  spousesJson       String?
+  dependantsJson    String?
+  beneficiariesJson String?
+
+  declarationAccepted Boolean @default(false)
+  popiaAccepted       Boolean @default(false)
+  signatureName       String?
+  signedAt            DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId, createdAt])
 }

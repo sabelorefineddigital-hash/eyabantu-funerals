@@ -10,6 +10,7 @@ import {
   CrmRevenueBreakdown,
   CrmStatCard,
 } from "@/components/crm/CrmDashboardKit";
+import { EyabantuFlyerStrip } from "@/components/crm/EyabantuFlyerStrip";
 import { staffRoleLabel } from "@/lib/crm-nav-config";
 import { Activity, Banknote, ClipboardList, FileSignature, Users } from "lucide-react";
 
@@ -198,10 +199,15 @@ export default async function StaffHomePage() {
           title="Dashboard overview"
           subtitle={`Signed in as ${role}. This layout mirrors the owner dashboard shell with role-aware metrics — ${access === "MANAGEMENT" ? "management sees branch KPIs and collections context." : access === "ADMINISTRATION" ? "administration sees servicing and accounts weighting." : access === "AGENT" ? "agents see pipeline and member touchpoints." : "viewers get a safe read-only slice."}`}
         />
-        <Link href="/staff/stream" className="shrink-0 text-sm font-semibold text-sky-600 hover:underline md:mb-1">
+        <Link href="/staff/stream" className="shrink-0 text-sm font-semibold text-eyabantu-gold hover:text-eyabantu-navy md:mb-1">
           Activity stream →
         </Link>
       </div>
+
+      <EyabantuFlyerStrip
+        packagesHref={access === "AGENT" ? "/staff/applications/new" : "/staff/policies"}
+        ctaLabel={access === "AGENT" ? "New application →" : "View policies →"}
+      />
 
       {statGrid()}
 
