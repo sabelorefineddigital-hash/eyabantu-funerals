@@ -1,5 +1,5 @@
 import { CrmTopBar } from "@/components/crm/CrmSidebar";
-import { PackageCard } from "@/components/packages/PackageCard";
+import { PackageOfferCard } from "@/components/packages/PackageOfferCard";
 import { PackagesRateSummary } from "@/components/packages/PackagesRateSummary";
 import {
   COVER_GROUP_LABELS,
@@ -15,7 +15,7 @@ export default function OwnerPackagesPage() {
     <div className="space-y-8">
       <CrmTopBar
         title="Eyabantu packages"
-        subtitle="Official funeral cover tariffs — 90-day waiting period, up to 100 years. Use these when capturing payments."
+        subtitle="Official funeral cover tariffs — 90-day waiting period, up to 100 years. Email or print a branded summary for any package."
       />
 
       <PackagesRateSummary />
@@ -28,7 +28,7 @@ export default function OwnerPackagesPage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {packagesByGroup(group).map((pkg) => (
-              <PackageCard key={pkg.code} pkg={pkg} />
+              <PackageOfferCard key={pkg.code} pkg={pkg} />
             ))}
           </div>
         </section>
@@ -41,7 +41,7 @@ export default function OwnerPackagesPage() {
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           {addonPackages().map((pkg) => (
-            <PackageCard key={pkg.code} pkg={pkg} />
+            <PackageOfferCard key={pkg.code} pkg={pkg} />
           ))}
         </div>
       </section>

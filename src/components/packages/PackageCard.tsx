@@ -98,19 +98,29 @@ type PackageCardProps = {
   selected?: boolean;
   onSelect?: () => void;
   compact?: boolean;
+  variant?: "select" | "display";
+  className?: string;
 };
 
-export function PackageCard({ pkg, selected, onSelect, compact }: PackageCardProps) {
+export function PackageCard({
+  pkg,
+  selected,
+  onSelect,
+  compact,
+  variant = "select",
+  className = "",
+}: PackageCardProps) {
   const styles = accentStyles[pkg.accent];
+  const isDisplay = variant === "display";
 
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className={`group relative flex w-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-left shadow-sm transition hover:shadow-md ${
-        selected ? `border-[#D48E2F] ring-2 ring-[#D48E2F]/30` : "border-slate-200 hover:border-[#1D2651]/25"
-      } ${compact ? "p-3" : "p-4"}`}
-    >
+  const cardClass = `group relative flex w-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-left shadow-sm transition ${
+    isDisplay ? "" : "hover:shadow-md"
+  } ${
+    selected ? `border-[#D48E2F] ring-2 ring-[#D48E2F]/30` : "border-slate-200 hover:border-[#1D2651]/25"
+  } ${compact ? "p-3" : "p-4"} ${className}`;
+
+  const inner = (
+    <>
       <div className={`flex items-start justify-between gap-2 ${compact ? "" : "mb-3"}`}>
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${styles.badge}`}>
           <CoverIcon pkg={pkg} />
@@ -143,6 +153,16 @@ export function PackageCard({ pkg, selected, onSelect, compact }: PackageCardPro
       <p className="mt-2 text-[9px] font-medium uppercase tracking-wide text-slate-400">
         {pkg.waitingDays}-day waiting · up to {pkg.maxAge} yrs
       </p>
+    </>
+  );
+
+  if (isDisplay) {
+    return <article className={cardClass}>{inner}</article>;
+  }
+
+  return (
+    <button type="button" onClick={onSelect} className={cardClass}>
+      {inner}
     </button>
   );
 }
