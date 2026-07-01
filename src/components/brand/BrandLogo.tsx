@@ -1,27 +1,41 @@
+"use client";
+
 import Image from "next/image";
 
-/** Eyabantu horizontal lockup — `public/branding/logo.png` (617×150, black background). */
 const LOGO_WIDTH = 617;
 const LOGO_HEIGHT = 150;
 
 type Props = {
   className?: string;
-  priority?: boolean;
   maxHeightClass?: string;
-  withWordmark?: boolean;
-  /** @deprecated Logo includes its own black background; kept for call-site compatibility. */
-  bare?: boolean;
 };
 
-/**
- * Official Eyabantu Funerals mark. Swap `public/branding/logo.png` to update site-wide.
- */
+/** Plain img for print pages — more reliable than Next Image in print/PDF pipelines. */
+export function PrintBrandLogo({ className = "", maxHeightClass = "max-h-14" }: Props) {
+  return (
+    <img
+      src="/branding/logo.png"
+      alt="Eyabantu Funerals"
+      width={LOGO_WIDTH}
+      height={LOGO_HEIGHT}
+      className={`h-auto w-auto max-w-full object-contain object-left ${maxHeightClass} ${className}`}
+    />
+  );
+}
+
+/** Next/Image variant for screen UI elsewhere. */
 export function BrandLogo({
   className = "",
   priority = false,
   maxHeightClass = "max-h-14",
   withWordmark = false,
-}: Props) {
+}: {
+  className?: string;
+  priority?: boolean;
+  maxHeightClass?: string;
+  withWordmark?: boolean;
+  bare?: boolean;
+}) {
   return (
     <div className={`inline-flex flex-col items-start justify-center ${className}`}>
       <span className="inline-flex items-center justify-center overflow-hidden rounded-md">

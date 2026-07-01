@@ -29,6 +29,8 @@ export function ReceiptToolbar({ backHref = "/owner/payments", ...props }: Share
       backHref={backHref}
       backLabel="Back to payments"
       documentLabel={`Receipt ${props.receiptNumber}`}
+      documentId="receipt-document"
+      downloadFileName={`Eyabantu-Receipt-${props.receiptNumber}.pdf`}
     >
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <button

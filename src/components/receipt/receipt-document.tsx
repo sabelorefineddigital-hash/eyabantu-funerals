@@ -1,5 +1,5 @@
 import type { PaymentMethod } from "@prisma/client";
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import { PrintBrandLogo } from "@/components/brand/BrandLogo";
 import { CasketIllustration } from "@/components/packages/PackageCard";
 import { getPackageByCode } from "@/lib/eyabantu-packages";
 import { paymentMethodLabel } from "@/lib/payment-labels";
@@ -53,8 +53,7 @@ export function ReceiptDocument({
       <header className="flex flex-col gap-6 border-b border-slate-200 pb-8 print:border-slate-300 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
           <div className="flex shrink-0 justify-center sm:justify-start">
-            <BrandLogo
-              priority
+            <PrintBrandLogo
               maxHeightClass="max-h-[2.625rem] sm:max-h-14 print:max-h-16"
               className="w-auto max-w-[min(100%,220px)] sm:max-w-[240px]"
             />

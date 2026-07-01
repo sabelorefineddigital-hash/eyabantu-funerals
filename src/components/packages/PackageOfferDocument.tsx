@@ -1,4 +1,4 @@
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import { PrintBrandLogo } from "@/components/brand/BrandLogo";
 import { CasketIllustration } from "@/components/packages/PackageCard";
 import { formatZar, type EyabantuPackage } from "@/lib/eyabantu-packages";
 
@@ -17,7 +17,7 @@ export function PackageOfferDocument({ pkg, preparedAt = new Date() }: Props) {
     >
       <header className="flex flex-col gap-6 border-b border-eyabantu-gold/25 pb-8 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <BrandLogo priority maxHeightClass="max-h-12 sm:max-h-14" />
+          <PrintBrandLogo maxHeightClass="max-h-12 sm:max-h-14" />
           <div className="min-w-0 flex-1 text-center sm:text-left">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-eyabantu-gold">Funeral cover summary</p>
             <h1 className="mt-1 text-xl font-bold text-eyabantu-navy">Eyabantu Funerals</h1>

@@ -29,6 +29,8 @@ export function PackageShareToolbar({ pkg, backHref = "/owner/packages" }: Props
       backHref={backHref}
       backLabel="Back to packages"
       documentLabel={`${pkg.title} summary`}
+      documentId="package-offer-document"
+      downloadFileName={`Eyabantu-${pkg.code}.pdf`}
     >
       <div className="rounded-2xl border border-eyabantu-gold/25 bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
