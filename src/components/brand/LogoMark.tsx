@@ -7,19 +7,26 @@ export function LogoMark({ className = "h-14 w-14" }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
-      <circle cx="32" cy="32" r="8" fill="currentColor" opacity="0.85" />
-      <circle cx="32" cy="32" r="14" stroke="currentColor" strokeWidth="2" opacity="0.6" />
-      <circle cx="32" cy="32" r="20" stroke="currentColor" strokeWidth="2" opacity="0.45" />
+      <circle cx="32" cy="32" r="7" fill="currentColor" opacity="0.9" />
+      <circle cx="32" cy="32" r="11.5" stroke="currentColor" strokeWidth="1.5" opacity="0.75" />
+      <circle cx="32" cy="32" r="16" stroke="currentColor" strokeWidth="1.5" opacity="0.55" />
       {Array.from({ length: 12 }).map((_, i) => {
-        const angle = (i * 30 * Math.PI) / 180;
-        const x1 = 32 + Math.cos(angle) * 20;
-        const y1 = 32 + Math.sin(angle) * 20;
-        const x2 = 32 + Math.cos(angle) * 26;
-        const y2 = 32 + Math.sin(angle) * 26;
+        const angle = ((i * 30 - 90) * Math.PI) / 180;
+        const bx = 32 + Math.cos(angle) * 16;
+        const by = 32 + Math.sin(angle) * 16;
+        const tx = 32 + Math.cos(angle) * 21;
+        const ty = 32 + Math.sin(angle) * 21;
+        const hx = 32 + Math.cos(angle) * 24.5;
+        const hy = 32 + Math.sin(angle) * 24.5;
         return (
-          <g key={i}>
-            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-            <circle cx={x2} cy={y2} r="2.5" fill="currentColor" opacity="0.85" />
+          <g key={i} opacity="0.85">
+            <line x1={bx} y1={by} x2={tx} y2={ty} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <circle cx={hx} cy={hy} r="2.2" fill="currentColor" />
+            <path
+              d={`M ${tx - 1.8} ${ty + 1.2} Q ${hx} ${hy + 2.8} ${tx + 1.8} ${ty + 1.2} Z`}
+              fill="currentColor"
+              opacity="0.8"
+            />
           </g>
         );
       })}

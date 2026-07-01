@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { StaffAccessLevel } from "@prisma/client";
 import { Bell, LogOut, Mail, Menu, Search, Settings, X } from "lucide-react";
 import { logoutAction } from "@/app/actions/auth";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import {
   getOwnerNavGroups,
   getStaffNavGroups,
@@ -64,16 +64,8 @@ function SidebarNav({
         aria-label="Eyabantu Funerals — Home"
         className="flex items-center border-b border-slate-200/80 px-4 py-4 transition hover:bg-slate-50/90"
       >
-        <span className="flex min-w-0 flex-1 items-center justify-center rounded-lg bg-black px-2 py-1.5 md:justify-start">
-          <Image
-            src="/branding/logo.png"
-            alt="Eyabantu Funerals"
-            width={360}
-            height={144}
-            unoptimized
-            priority
-            className="h-11 w-auto max-w-full bg-transparent object-contain object-center md:h-[3.25rem] md:object-left"
-          />
+        <span className="flex min-w-0 flex-1 items-center justify-center md:justify-start">
+          <BrandLogo priority maxHeightClass="h-11 md:h-[3.25rem]" />
         </span>
       </Link>
 
@@ -167,17 +159,10 @@ function WorkspaceHeader({
         <Link
           href={dashHome}
           prefetch={false}
-          className="shrink-0 rounded-lg bg-black p-1.5 transition hover:opacity-90 md:hidden"
+          className="shrink-0 transition hover:opacity-90 md:hidden"
           aria-label="Eyabantu Funerals — Home"
         >
-          <Image
-            src="/branding/logo.png"
-            alt="Eyabantu Funerals"
-            width={220}
-            height={88}
-            unoptimized
-            className="h-9 w-auto max-w-[118px] bg-transparent object-contain object-center"
-          />
+          <BrandLogo maxHeightClass="h-9 max-w-[118px]" />
         </Link>
         <div className="relative min-w-0 flex-1 max-md:max-w-none md:max-w-xl">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />

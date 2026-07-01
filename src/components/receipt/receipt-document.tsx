@@ -39,11 +39,11 @@ export function ReceiptDocument({ tenantName, receiptNumber, receivedAt, amount,
     >
       <header className="flex flex-col gap-6 border-b border-slate-200 pb-8 print:border-slate-300 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <div className="flex shrink-0 justify-center sm:justify-start [&_span]:!bg-transparent [&_img]:bg-transparent">
+          <div className="flex shrink-0 justify-center sm:justify-start">
             <BrandLogo
               priority
               maxHeightClass="max-h-[2.625rem] sm:max-h-14 print:max-h-16"
-              className="w-auto max-w-[min(100%,170px)] sm:max-w-[190px]"
+              className="w-auto max-w-[min(100%,220px)] sm:max-w-[240px]"
             />
           </div>
           <div className="min-w-0 flex-1 text-center sm:text-left">

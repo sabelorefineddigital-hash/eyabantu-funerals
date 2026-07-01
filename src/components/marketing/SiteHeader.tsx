@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-sky-200/70 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 lg:px-8">
-        <Link href="/" className="flex shrink-0 items-center gap-2">
+        <Link href="/" className="flex shrink-0 items-center gap-2 rounded-lg">
           <BrandLogo priority maxHeightClass="max-h-11 sm:max-h-12" />
         </Link>
         <nav className="order-3 flex w-full flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold text-brand-deep md:order-none md:w-auto md:justify-end md:gap-6">

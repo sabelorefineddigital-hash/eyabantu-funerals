@@ -5,7 +5,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-sky-200/80 bg-[#071426] py-10 text-center text-xs text-sky-100/80">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4">
-        <Link href="/" className="rounded-xl bg-black px-3 py-2 opacity-95 ring-1 ring-white/10 transition hover:opacity-100">
+        <Link href="/" className="rounded-xl transition hover:opacity-95">
           <BrandLogo maxHeightClass="max-h-11" />
         </Link>
         <nav className="flex flex-wrap justify-center gap-3 text-[11px] font-semibold uppercase tracking-wide text-sky-200/90">

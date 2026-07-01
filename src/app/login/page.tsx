@@ -33,9 +33,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <div className="relative flex flex-1 flex-col p-6 sm:p-10 lg:max-w-xl lg:justify-center">
             <Link
               href="/"
-              className="inline-flex w-fit items-center gap-3 rounded-2xl bg-black px-4 py-3 shadow-md ring-1 ring-white/10"
+              className="inline-flex w-fit items-center gap-3"
             >
-              <BrandLogo priority maxHeightClass="max-h-14 sm:max-h-16" />
+              <BrandLogo priority bare maxHeightClass="max-h-14 sm:max-h-16" />
             </Link>
 
             <div className="mt-8 hidden lg:block">
