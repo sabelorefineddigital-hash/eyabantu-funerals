@@ -10,7 +10,7 @@ import {
   CrmRevenueBreakdown,
   CrmStatCard,
 } from "@/components/crm/CrmDashboardKit";
-import { Banknote, ClipboardList, HeartPulse, Users } from "lucide-react";
+import { ClipboardList, FileSignature, HeartPulse, Users } from "lucide-react";
 
 function fmtMoney(n: number) {
   return `R${n.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -45,9 +45,25 @@ export default async function OwnerHomePage() {
   const tenantId = session.tenantId;
   await syncAllMemberAccountsForTenant(tenantId);
   const yearStart = new Date(new Date().getFullYear(), 0, 1);
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const startOfYesterday = new Date(startOfToday);
+  startOfYesterday.setDate(startOfYesterday.getDate() - 1);
 
-  const [members, defaulted, claimsOpen, funeralsUpcoming, applicationsPending, lastPayments, activeMembers, ytdSum] =
-    await Promise.all([
+  const [
+    members,
+    defaulted,
+    claimsOpen,
+    funeralsUpcoming,
+    applicationsPending,
+    lastPayments,
+    activeMembers,
+    ytdSum,
+    policiesToday,
+    policiesYesterday,
+    clientAppsToday,
+    clientAppsYesterday,
+  ] = await Promise.all([
       prisma.member.count({ where: { tenantId } }),
       prisma.member.count({ where: { tenantId, status: "DEFAULTED" } }),
       prisma.claim.count({ where: { tenantId, status: { in: ["OPEN", "ASSESSING"] } } }),
@@ -68,7 +84,27 @@ export default async function OwnerHomePage() {
         where: { member: { tenantId }, receivedAt: { gte: yearStart } },
         _sum: { amount: true },
       }),
+      prisma.policyApplication.count({
+        where: { tenantId, createdAt: { gte: startOfToday } },
+      }),
+      prisma.policyApplication.count({
+        where: { tenantId, createdAt: { gte: startOfYesterday, lt: startOfToday } },
+      }),
+      prisma.clientApplication.count({
+        where: { tenantId, createdAt: { gte: startOfToday } },
+      }),
+      prisma.clientApplication.count({
+        where: { tenantId, createdAt: { gte: startOfYesterday, lt: startOfToday } },
+      }),
     ]);
+
+  const dailyPoliciesCreated = policiesToday + clientAppsToday;
+  const dailyPoliciesYesterday = policiesYesterday + clientAppsYesterday;
+  const policiesTrendUp = dailyPoliciesCreated >= dailyPoliciesYesterday;
+  const policiesTrendLabel =
+    dailyPoliciesYesterday === 0
+      ? `${dailyPoliciesCreated} captured today`
+      : `${dailyPoliciesCreated >= dailyPoliciesYesterday ? "+" : ""}${dailyPoliciesCreated - dailyPoliciesYesterday} vs yesterday`;
 
   const collectionRate = members === 0 ? 0 : Math.round((activeMembers / members) * 100);
   const ytd = ytdSum._sum.amount ?? 0;
@@ -126,13 +162,13 @@ export default async function OwnerHomePage() {
           href="/owner/members"
         />
         <CrmStatCard
-          title="Revenue (YTD)"
-          value={fmtMoney(ytd)}
-          hint="Receipted premiums in calendar year"
-          trendLabel="+11.2% vs prior YTD (demo)"
-          trendUp
-          icon={Banknote}
-          href="/owner/payments"
+          title="Daily policies created"
+          value={dailyPoliciesCreated}
+          hint={`${policiesToday} policy apps · ${clientAppsToday} client forms today`}
+          trendLabel={policiesTrendLabel}
+          trendUp={policiesTrendUp}
+          icon={FileSignature}
+          href="/owner/applications"
         />
         <CrmStatCard
           title="Open claims"
