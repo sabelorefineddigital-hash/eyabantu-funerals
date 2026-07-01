@@ -1,8 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState, useTransition } from "react";
-import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { loginAction, type AuthState } from "@/app/actions/auth";
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from "@/lib/demo-accounts";
 
@@ -13,6 +12,7 @@ type FormProps = { initialNext?: string };
 export function LoginForm({ initialNext }: FormProps) {
   const [state, formAction, pending] = useActionState(loginAction, initial);
   const [demo, setDemo] = useState(true);
+  const [showDemoHelp, setShowDemoHelp] = useState(false);
   const [email, setEmail] = useState(DEMO_ACCOUNTS[0]?.email ?? "");
   const [password, setPassword] = useState<string>(DEMO_PASSWORD);
   const [, startCopy] = useTransition();
@@ -28,115 +28,112 @@ export function LoginForm({ initialNext }: FormProps) {
   }, [demo]);
 
   return (
-    <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#142a55]/10 bg-white shadow-[0_24px_60px_-32px_rgba(20,42,85,0.45)] ring-1 ring-white">
-      {/* Navy header bar — flyer section style */}
-      <div className="bg-[#142a55] px-6 py-4 text-white">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-bold tracking-tight">Sign in</h2>
-            <p className="mt-0.5 text-xs text-white/75">Work email and password</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setDemo((d) => !d)}
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide shadow-sm transition ${
-              demo
-                ? "bg-[#f5c518] text-[#142a55] ring-1 ring-[#f5c518]/80"
-                : "bg-white/10 text-white ring-1 ring-white/25 hover:bg-white/20"
-            }`}
-          >
-            <Sparkles className="h-3.5 w-3.5" aria-hidden />
-            Demo
-          </button>
-        </div>
+    <div className="rounded-2xl border border-[#142a55]/8 bg-white p-6 shadow-[0_8px_40px_-12px_rgba(20,42,85,0.18)] sm:p-8">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Staff sign in</p>
+        <button
+          type="button"
+          onClick={() => setDemo((d) => !d)}
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+            demo
+              ? "bg-[#fff8ef] text-[#f18a00] ring-1 ring-[#f18a00]/25"
+              : "bg-slate-100 text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+          }`}
+        >
+          <Sparkles className="h-3 w-3" aria-hidden />
+          Demo mode
+        </button>
       </div>
 
-      <div className="px-6 py-5 sm:px-8 sm:py-6">
-        <div className="rounded-xl border border-[#f18a00]/25 bg-gradient-to-r from-[#fff8ef] to-white px-4 py-3 text-xs text-[#4a5568]">
-          <span className="font-bold uppercase tracking-wide text-[#f18a00]">Demo password</span>
-          <span className="mx-2 text-[#142a55]/30">·</span>
-          <span className="font-mono font-bold text-[#142a55]">{DEMO_PASSWORD}</span>
+      <form action={formAction} className="mt-6 space-y-5">
+        <input type="hidden" name="next" value={initialNext ?? ""} />
+
+        <div>
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#142a55]">
+            Email address
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="username"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="name@eyabantu-funerals.co.za"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#142a55] outline-none transition placeholder:text-slate-400 focus:border-[#142a55] focus:ring-2 focus:ring-[#142a55]/10"
+          />
         </div>
 
-        <form action={formAction} className="mt-5 space-y-4">
-          <input type="hidden" name="next" value={initialNext ?? ""} />
-          <div>
-            <label htmlFor="email" className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#142a55]">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="username"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-[#142a55]/15 bg-white px-3 py-2.5 text-sm text-[#142a55] shadow-inner outline-none transition focus:border-[#f18a00] focus:ring-4 focus:ring-[#f18a00]/15"
-            />
+        <div>
+          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-[#142a55]">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#142a55] outline-none transition focus:border-[#142a55] focus:ring-2 focus:ring-[#142a55]/10"
+          />
+        </div>
+
+        {state.error ? (
+          <p className="rounded-lg border border-red-100 bg-red-50 px-3 py-2.5 text-sm text-red-700">{state.error}</p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full rounded-lg bg-[#f18a00] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e07d00] focus:outline-none focus:ring-2 focus:ring-[#f18a00]/40 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {pending ? "Signing in…" : "Sign in"}
+        </button>
+      </form>
+
+      <button
+        type="button"
+        onClick={() => setShowDemoHelp((v) => !v)}
+        className="mt-5 flex w-full items-center justify-center gap-1.5 text-xs font-medium text-slate-500 transition hover:text-[#142a55]"
+      >
+        Demo login details
+        <ChevronDown className={`h-3.5 w-3.5 transition ${showDemoHelp ? "rotate-180" : ""}`} aria-hidden />
+      </button>
+
+      {showDemoHelp ? (
+        <div className="mt-3 space-y-3 rounded-xl border border-slate-100 bg-slate-50/80 p-4">
+          <p className="text-xs text-slate-600">
+            Password for all demo accounts:{" "}
+            <span className="font-mono font-bold text-[#142a55]">{DEMO_PASSWORD}</span>
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {DEMO_ACCOUNTS.map((a) => (
+              <button
+                key={a.email}
+                type="button"
+                className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-[#142a55] transition hover:border-[#f18a00]/40 hover:text-[#f18a00]"
+                onClick={() => {
+                  setEmail(a.email);
+                  setPassword(DEMO_PASSWORD);
+                  setDemo(true);
+                  startCopy(async () => {
+                    try {
+                      await navigator.clipboard.writeText(a.email);
+                    } catch {
+                      // ignore
+                    }
+                  });
+                }}
+              >
+                {a.badge}: {a.name.split(" ")[0]}
+              </button>
+            ))}
           </div>
-          <div>
-            <label htmlFor="password" className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#142a55]">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-[#142a55]/15 bg-white px-3 py-2.5 text-sm text-[#142a55] shadow-inner outline-none transition focus:border-[#f18a00] focus:ring-4 focus:ring-[#f18a00]/15"
-            />
-          </div>
-
-          <div className="rounded-xl border border-dashed border-[#142a55]/15 bg-[#f4f5f7] p-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#142a55]/70">Quick picks</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {DEMO_ACCOUNTS.map((a) => (
-                <button
-                  key={a.email}
-                  type="button"
-                  className="rounded-full border border-[#142a55]/10 bg-white px-3 py-1 text-[11px] font-semibold text-[#142a55] shadow-sm transition hover:border-[#f18a00]/40 hover:text-[#f18a00]"
-                  onClick={() => {
-                    setEmail(a.email);
-                    setPassword(DEMO_PASSWORD);
-                    startCopy(async () => {
-                      try {
-                        await navigator.clipboard.writeText(a.email);
-                      } catch {
-                        // ignore
-                      }
-                    });
-                  }}
-                  title={`Use ${a.email}`}
-                >
-                  {a.badge}: {a.name.split(" ")[0]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {state.error ? (
-            <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800">{state.error}</p>
-          ) : null}
-
-          <button
-            type="submit"
-            disabled={pending}
-            className="inline-flex w-full items-center justify-center rounded-xl bg-[#f18a00] px-4 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-lg shadow-[#f18a00]/30 transition hover:bg-[#e07d00] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {pending ? "Signing in…" : "Continue to workspace"}
-          </button>
-        </form>
-
-        <p className="mt-5 hidden text-center text-xs text-[#6b7280] lg:block">
-          <Link className="font-semibold text-[#142a55] hover:text-[#f18a00] hover:underline" href="/">
-            Back to public site
-          </Link>
-        </p>
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 }
