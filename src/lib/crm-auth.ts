@@ -26,3 +26,11 @@ export async function requireStaffSession(): Promise<SessionPayload> {
   if (s.role !== "STAFF") redirect(s.role === "OWNER" ? "/owner" : "/login");
   return s;
 }
+
+/** Use on `/print/*` pages — any signed-in owner or staff member. */
+export async function requireCrmSession(): Promise<SessionPayload> {
+  const s = await getSessionFromCookies();
+  if (!s) redirect("/login");
+  if (s.role !== "OWNER" && s.role !== "STAFF") redirect("/login");
+  return s;
+}

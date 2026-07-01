@@ -1,12 +1,17 @@
 import type { EyabantuPackage } from "@/lib/eyabantu-packages";
 import { formatZar } from "@/lib/eyabantu-packages";
 
+export function packagePrintPath(code: string) {
+  return `/print/package/${encodeURIComponent(code)}`;
+}
+
+/** @deprecated Use packagePrintPath — kept as alias for existing imports. */
 export function packageSharePath(code: string) {
-  return `/owner/packages/share/${encodeURIComponent(code)}`;
+  return packagePrintPath(code);
 }
 
 export function buildPackageShareUrl(code: string, origin?: string) {
-  const path = packageSharePath(code);
+  const path = packagePrintPath(code);
   return origin ? `${origin}${path}` : path;
 }
 
@@ -53,5 +58,5 @@ export function buildPackageMailto(pkg: EyabantuPackage, options?: { to?: string
   const subject = encodeURIComponent(`Eyabantu Funerals — ${pkg.title}`);
   const body = encodeURIComponent(buildPackageEmailText(pkg, shareUrl, options?.recipientName));
   const to = options?.to?.trim();
-  return to ? `mailto:${encodeURIComponent(to)}?subject=${subject}&body=${body}` : `mailto:?subject=${subject}&body=${body}`;
+  return to ? `mailto:${to}?subject=${subject}&body=${body}` : `mailto:?subject=${subject}&body=${body}`;
 }

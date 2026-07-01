@@ -12,8 +12,8 @@ export type DemoAccount = {
 export const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     badge: "Owner",
-    name: "Musa Mthembu",
-    email: "musa@eyabantu-funerals.co.za",
+    name: "Ayanda Masikane",
+    email: "ayanda.masikane@eyabantu.co.za",
     description: "Principal owner — full command centre, integrations, HR, fleet.",
     accent: "ink",
   },
@@ -21,7 +21,7 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     badge: "Owner",
     name: "Thandi Mkhize",
     email: "thandi@eyabantu-funerals.co.za",
-    description: "Co-owner — same god-view as Musa for continuity planning.",
+    description: "Co-owner — same god-view as Ayanda for continuity planning.",
     accent: "ink",
   },
   {

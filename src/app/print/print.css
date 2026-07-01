@@ -1,0 +1,69 @@
+.print-document-shell {
+  background: #fff;
+  color: #1d2651;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    flex: none !important;
+  }
+
+  .print-document-shell {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  #package-offer-document,
+  #receipt-document {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    overflow: visible !important;
+  }
+
+  #package-offer-document img,
+  #receipt-document img {
+    display: block !important;
+    visibility: visible !important;
+    max-height: 3.5rem !important;
+    opacity: 1 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #package-offer-document *,
+  #receipt-document * {
+    visibility: visible !important;
+  }
+}

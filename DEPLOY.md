@@ -10,7 +10,7 @@ This app uses **Next.js**, **Prisma**, and **SQLite**. For a **durable** demo (d
 
 | Role            | Email                                       | Password   |
 |-----------------|---------------------------------------------|------------|
-| Owner           | `musa@eyabantu-funerals.co.za`    | `Demo@2026` |
+| Owner           | `ayanda.masikane@eyabantu.co.za`  | `Demo@2026` |
 | Owner           | `thandi@eyabantu-funerals.co.za`| `Demo@2026` |
 | Management      | `lindiwe.mgmt@eyabantu-funerals.co.za` | `Demo@2026` |
 | Administration  | `nomfundo.admin@eyabantu-funerals.co.za` | `Demo@2026` |

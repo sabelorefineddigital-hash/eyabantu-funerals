@@ -22,6 +22,15 @@ export async function middleware(req: NextRequest) {
     const { payload } = await jwtVerify(token, secretKey());
     const role = String(payload.role ?? "");
 
+    if (pathname.startsWith("/print")) {
+      if (role !== "OWNER" && role !== "STAFF") {
+        const url = req.nextUrl.clone();
+        url.pathname = "/login";
+        return NextResponse.redirect(url);
+      }
+      return NextResponse.next();
+    }
+
     if (pathname.startsWith("/owner")) {
       if (role !== "OWNER") {
         const url = req.nextUrl.clone();
@@ -52,5 +61,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/owner", "/owner/:path*", "/staff", "/staff/:path*"],
+  matcher: ["/owner", "/owner/:path*", "/staff", "/staff/:path*", "/print", "/print/:path*"],
 };
