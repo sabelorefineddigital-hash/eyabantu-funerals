@@ -1,0 +1,2 @@
+# Shell entrypoints must stay LF for Linux containers (Docker / Railway).
+*.sh text eol=lf
