@@ -10,7 +10,6 @@ import {
   CrmRevenueBreakdown,
   CrmStatCard,
 } from "@/components/crm/CrmDashboardKit";
-import { EyabantuFlyerStrip } from "@/components/crm/EyabantuFlyerStrip";
 import { Banknote, ClipboardList, HeartPulse, Users } from "lucide-react";
 
 function fmtMoney(n: number) {
@@ -115,8 +114,6 @@ export default async function OwnerHomePage() {
           Open activity stream →
         </Link>
       </div>
-
-      <EyabantuFlyerStrip packagesHref="/owner/packages" />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <CrmStatCard

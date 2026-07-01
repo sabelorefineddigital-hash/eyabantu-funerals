@@ -10,7 +10,6 @@ import {
   CrmRevenueBreakdown,
   CrmStatCard,
 } from "@/components/crm/CrmDashboardKit";
-import { EyabantuFlyerStrip } from "@/components/crm/EyabantuFlyerStrip";
 import { staffRoleLabel } from "@/lib/crm-nav-config";
 import { Activity, Banknote, ClipboardList, FileSignature, Users } from "lucide-react";
 
@@ -203,11 +202,6 @@ export default async function StaffHomePage() {
           Activity stream →
         </Link>
       </div>
-
-      <EyabantuFlyerStrip
-        packagesHref={access === "AGENT" ? "/staff/applications/new" : "/staff/policies"}
-        ctaLabel={access === "AGENT" ? "New application →" : "View policies →"}
-      />
 
       {statGrid()}
 
