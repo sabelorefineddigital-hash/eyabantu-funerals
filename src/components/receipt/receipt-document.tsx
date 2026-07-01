@@ -1,5 +1,7 @@
 import type { PaymentMethod } from "@prisma/client";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { CasketIllustration } from "@/components/packages/PackageCard";
+import { getPackageByCode } from "@/lib/eyabantu-packages";
 import { paymentMethodLabel } from "@/lib/payment-labels";
 
 export type ReceiptDocumentProps = {
@@ -9,6 +11,7 @@ export type ReceiptDocumentProps = {
   amount: number;
   method: PaymentMethod;
   externalRef: string | null;
+  packageCode?: string | null;
   member: {
     mainMemberName: string;
     policyNumber: string | null;
@@ -29,8 +32,18 @@ function formatDate(d: Date) {
   }).format(d);
 }
 
-export function ReceiptDocument({ tenantName, receiptNumber, receivedAt, amount, method, externalRef, member }: ReceiptDocumentProps) {
+export function ReceiptDocument({
+  tenantName,
+  receiptNumber,
+  receivedAt,
+  amount,
+  method,
+  externalRef,
+  packageCode,
+  member,
+}: ReceiptDocumentProps) {
   const amt = formatZar(amount);
+  const pkg = getPackageByCode(packageCode);
 
   return (
     <article
@@ -91,6 +104,23 @@ export function ReceiptDocument({ tenantName, receiptNumber, receivedAt, amount,
               <div className="flex justify-between gap-4 text-sm">
                 <dt className="text-slate-600">Gateway reference</dt>
                 <dd className="font-mono text-xs font-semibold text-slate-900">{externalRef}</dd>
+              </div>
+            ) : null}
+            {pkg ? (
+              <div className="rounded-lg border border-[#142a55]/10 bg-[#f8f9fb] p-3">
+                <div className="flex items-center gap-3">
+                  <CasketIllustration tier={pkg.tier} className="h-10 w-14 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-wide text-[#f18a00]">Package</p>
+                    <p className="text-sm font-semibold text-[#142a55]">{pkg.title}</p>
+                    {pkg.cashBack ? (
+                      <p className="mt-0.5 text-[10px] text-slate-500">
+                        Cash back R{pkg.cashBack.toLocaleString("en-ZA")}
+                        {pkg.noFuneralPayout ? ` · No-funeral R${pkg.noFuneralPayout.toLocaleString("en-ZA")}` : ""}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
               </div>
             ) : null}
             <div className="border-t border-dashed border-slate-200 pt-3">

@@ -54,6 +54,7 @@ export default async function OwnerReceiptPage({ params }: Props) {
         amount={payment.amount}
         method={payment.method}
         externalRef={payment.externalRef}
+        packageCode={payment.packageCode}
         member={payment.member}
       />
       <style>{`

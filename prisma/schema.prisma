@@ -107,6 +107,7 @@ model Member {
   tenantId        String
   tenant          Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   policyNumber    String?
+  packageCode     String?
   mainMemberName  String
   idNumber        String?
   phone           String?
@@ -169,6 +170,7 @@ model Payment {
   memberId      String
   member        Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
   amount        Float
+  packageCode   String?
   method        PaymentMethod
   status        PaymentStatus @default(COMPLETED)
   receiptNumber String        @unique

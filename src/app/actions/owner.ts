@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { StaffAccessLevel, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import { getPackageByCode } from "@/lib/eyabantu-packages";
 import { syncMemberAccountFromLedger } from "@/lib/member-account-sync";
 import { getSessionFromCookies } from "@/lib/session";
 
@@ -110,9 +111,20 @@ export async function recordManualPaymentAction(
 ): Promise<PaymentManualState> {
   const session = await requireOwner();
   const memberId = String(formData.get("memberId") ?? "");
+  const packageCode = String(formData.get("packageCode") ?? "").trim() || null;
   const amount = Number(formData.get("amount") ?? 0);
-  if (!memberId || !Number.isFinite(amount) || amount <= 0) {
-    return { error: "Select a member and enter a valid amount." };
+
+  if (!memberId || !packageCode) {
+    return { error: "Select a member and an Eyabantu package." };
+  }
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return { error: "Enter a valid amount." };
+  }
+
+  const pkg = getPackageByCode(packageCode);
+  if (!pkg) return { error: "Unknown package selected." };
+  if (Math.abs(amount - pkg.monthlyPremium) > 0.01) {
+    return { error: `Amount must match package premium (R${pkg.monthlyPremium.toFixed(2)}).` };
   }
 
   const member = await prisma.member.findFirst({
@@ -126,11 +138,44 @@ export async function recordManualPaymentAction(
     data: {
       memberId,
       amount,
+      packageCode,
       method: "MANUAL",
       status: "COMPLETED",
       receiptNumber,
     },
   });
+
+  if (pkg.kind === "PLAN") {
+    await prisma.member.update({
+      where: { id: memberId },
+      data: {
+        packageCode,
+        monthlyPremium: pkg.monthlyPremium,
+      },
+    });
+    const existingPolicy = await prisma.policy.findFirst({
+      where: { memberId, status: "ACTIVE" },
+      orderBy: { effectiveAt: "desc" },
+    });
+    if (existingPolicy) {
+      await prisma.policy.update({
+        where: { id: existingPolicy.id },
+        data: {
+          productName: pkg.title,
+          coverAmount: pkg.noFuneralPayout ?? pkg.cashBack ?? 0,
+        },
+      });
+    } else {
+      await prisma.policy.create({
+        data: {
+          memberId,
+          productName: pkg.title,
+          coverAmount: pkg.noFuneralPayout ?? pkg.cashBack ?? 0,
+          status: "ACTIVE",
+        },
+      });
+    }
+  }
 
   await syncMemberAccountFromLedger(memberId, session.tenantId);
 
@@ -139,11 +184,12 @@ export async function recordManualPaymentAction(
     userId: session.sub,
     action: "PAYMENT_RECEIVED",
     entityType: "Payment",
-    summary: `Manual payment of R${amount.toFixed(2)} recorded for ${member.mainMemberName}`,
-    metadata: { receiptNumber },
+    summary: `${pkg.title} — R${amount.toFixed(2)} for ${member.mainMemberName}`,
+    metadata: { receiptNumber, packageCode },
   });
 
   revalidatePath("/owner/payments");
+  revalidatePath("/owner/packages");
   revalidatePath("/owner/members");
   revalidatePath("/owner/accounts");
   revalidatePath("/owner");

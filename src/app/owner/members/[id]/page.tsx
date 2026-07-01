@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireOwnerSession } from "@/lib/crm-auth";
 import { CrmTopBar } from "@/components/crm/CrmSidebar";
+import { getPackageByCode } from "@/lib/eyabantu-packages";
 import { syncMemberAccountFromLedger } from "@/lib/member-account-sync";
 
 export default async function OwnerMemberDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,6 +30,8 @@ export default async function OwnerMemberDetailPage({ params }: { params: Promis
   ]);
 
   if (!member) notFound();
+
+  const enrolledPackage = getPackageByCode(member.packageCode);
 
   const totalContributions = paymentTotals._sum.amount ?? 0;
   const notionalArrears =
@@ -66,6 +69,10 @@ export default async function OwnerMemberDetailPage({ params }: { params: Promis
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted">Address</dt>
               <dd className="mt-1 text-foreground">{member.address ?? "—"}</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-semibold uppercase tracking-wide text-muted">Package</dt>
+              <dd className="mt-1 font-semibold text-[#142a55]">{enrolledPackage?.title ?? member.packageCode ?? "—"}</dd>
             </div>
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted">Premium</dt>

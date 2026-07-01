@@ -1,7 +1,9 @@
+import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import { requireOwnerSession } from "@/lib/crm-auth";
+import { getPackageByCode } from "@/lib/eyabantu-packages";
 import { syncAllMemberAccountsForTenant } from "@/lib/member-account-sync";
 import { CrmTopBar } from "@/components/crm/CrmSidebar";
 import { ReceiptQuickActions } from "@/components/receipt/receipt-toolbar";
@@ -86,29 +88,39 @@ export default async function OwnerPaymentsPage({ searchParams }: { searchParams
         <PaymentsFiltersBar members={members} />
       </Suspense>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <ManualPaymentForm
           key={validMemberId ?? "default-member"}
           members={memberOptions}
           defaultMemberId={validMemberId}
         />
-        <div className="space-y-3 rounded-2xl border border-border bg-white p-5 shadow-sm">
-          <div>
-            <h2 className="text-sm font-semibold text-[var(--brand-ink)]">PayFast / debit order</h2>
-            <p className="mt-1 text-xs text-muted">
-              Demo button logs a PayFast intent in the activity stream. Integrate merchant keys from the integrations
-              module before going live.
-            </p>
+        <div className="space-y-3">
+          <div className="rounded-2xl border border-[#142a55]/10 bg-white p-5 shadow-sm">
+            <div>
+              <h2 className="text-sm font-bold text-[#142a55]">PayFast / debit order</h2>
+              <p className="mt-1 text-xs text-slate-500">
+                Demo button logs a PayFast intent. Integrate merchant keys from integrations before go-live.
+              </p>
+            </div>
+            {payfastSubject ? (
+              <div className="mt-4">
+                <PayfastDemoButton
+                  amount={payfastSubject.monthlyPremium}
+                  memberName={payfastSubject.mainMemberName}
+                  memberId={payfastSubject.id}
+                />
+              </div>
+            ) : (
+              <p className="mt-4 text-sm text-muted">Add members to exercise PayFast stubs.</p>
+            )}
           </div>
-          {payfastSubject ? (
-            <PayfastDemoButton
-              amount={payfastSubject.monthlyPremium}
-              memberName={payfastSubject.mainMemberName}
-              memberId={payfastSubject.id}
-            />
-          ) : (
-            <p className="text-sm text-muted">Add members to exercise PayFast stubs.</p>
-          )}
+          <Link
+            href="/owner/packages"
+            className="block rounded-2xl border border-[#f18a00]/30 bg-gradient-to-br from-[#fff8ef] to-white p-4 text-sm shadow-sm transition hover:border-[#f18a00]/50"
+          >
+            <p className="font-bold text-[#142a55]">View full package rate card →</p>
+            <p className="mt-1 text-xs text-slate-500">6 / 10 / single person covers and extra-person add-ons.</p>
+          </Link>
         </div>
       </div>
 
@@ -137,6 +149,7 @@ export default async function OwnerPaymentsPage({ searchParams }: { searchParams
                 <tr>
                   <th className="px-4 py-3">Receipt</th>
                   <th className="px-4 py-3">Member</th>
+                  <th className="px-4 py-3">Package</th>
                   <th className="px-4 py-3">Method</th>
                   <th className="px-4 py-3">Received</th>
                   <th className="px-4 py-3 text-right">Amount</th>
@@ -144,13 +157,18 @@ export default async function OwnerPaymentsPage({ searchParams }: { searchParams
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {payments.map((p) => (
+                {payments.map((p) => {
+                  const pkg = getPackageByCode(p.packageCode);
+                  return (
                   <tr key={p.id} className="hover:bg-[var(--background)]/80">
                     <td className="whitespace-nowrap px-4 py-3 text-xs font-semibold text-[var(--brand-ink)]">
                       {p.receiptNumber}
                     </td>
                     <td className="max-w-[180px] truncate px-4 py-3 text-xs text-muted" title={p.member.mainMemberName}>
                       {p.member.mainMemberName}
+                    </td>
+                    <td className="max-w-[140px] truncate px-4 py-3 text-[11px] font-medium text-[#142a55]" title={pkg?.title}>
+                      {pkg?.title ?? "—"}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs">{paymentMethodLabel(p.method)}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs text-muted">
@@ -169,7 +187,8 @@ export default async function OwnerPaymentsPage({ searchParams }: { searchParams
                       />
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
