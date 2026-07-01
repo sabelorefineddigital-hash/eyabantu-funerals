@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { CONTACT } from "@/lib/contact";
 import { DEMO_ACCOUNTS } from "@/lib/demo-accounts";
 import { DemoCredentials } from "./demo-credentials";
 import { LoginForm } from "./login-form";
@@ -13,65 +15,98 @@ type LoginPageProps = { searchParams: Promise<{ next?: string }> };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const sp = await searchParams;
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a1628]">
+    <div className="relative flex min-h-screen flex-col bg-[#e9eaec] lg:flex-row">
+      {/* Subtle logo watermark — matches flyer background pattern */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(900px_500px_at_15%_20%,rgba(94,181,247,0.35),transparent_55%),radial-gradient(700px_400px_at_90%_10%,rgba(45,138,214,0.22),transparent_50%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        className="pointer-events-none absolute inset-0 opacity-[0.045]"
         style={{
-          backgroundImage:
-            "repeating-linear-gradient(-18deg, #fff 0 1px, transparent 1px 48px), repeating-linear-gradient(72deg, #fff 0 1px, transparent 1px 52px)",
+          backgroundImage: "url('/branding/logo.png')",
+          backgroundSize: "220px auto",
+          backgroundRepeat: "repeat",
         }}
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1400px] flex-col lg:flex-row">
-        <div className="relative flex flex-1 flex-col justify-between overflow-hidden lg:min-h-screen">
-          <div className="relative flex flex-1 flex-col p-6 sm:p-10 lg:max-w-xl lg:justify-center">
+      {/* Left — flyer hero with family imagery & navy diagonal accent */}
+      <section className="relative min-h-[320px] w-full overflow-hidden lg:min-h-screen lg:w-[58%]">
+        <Image
+          src="/marketing/eyabantu-flyer.png"
+          alt=""
+          fill
+          priority
+          className="object-cover object-[15%_20%] lg:object-[12%_18%]"
+          sizes="(max-width: 1024px) 100vw, 58vw"
+        />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#0f1f45]/88 via-[#142a55]/55 to-[#142a55]/15"
+          aria-hidden
+        />
+        {/* Flyer-style navy diagonal wedge */}
+        <div
+          className="pointer-events-none absolute -right-16 top-0 h-[42%] w-[58%] bg-[#142a55] opacity-95"
+          style={{ clipPath: "polygon(28% 0, 100% 0, 100% 100%, 0 100%)" }}
+          aria-hidden
+        />
+
+        <div className="relative z-10 flex h-full min-h-[320px] flex-col justify-between p-6 sm:p-8 lg:min-h-screen lg:p-10">
+          <div>
             <Link
               href="/"
-              className="inline-flex w-fit items-center gap-3"
+              className="inline-flex rounded-xl bg-white/95 px-4 py-3 shadow-lg ring-1 ring-white/60"
             >
-              <BrandLogo priority bare maxHeightClass="max-h-14 sm:max-h-16" />
+              <BrandLogo priority bare maxHeightClass="max-h-12 sm:max-h-14" />
             </Link>
 
-            <div className="mt-8 hidden lg:block">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">Eyabantu Funerals</p>
-              <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
-                Welcome to your operations workspace
+            <div className="mt-8 max-w-lg">
+              <span className="inline-flex rounded-md bg-[#f5c518] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#142a55] shadow-sm">
+                Staff portal
+              </span>
+              <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-[2.65rem]">
+                Caring for families.
+                <span className="mt-1 block text-[#f18a00]">Powered for your team.</span>
               </h1>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-sky-100/90">
-                Owners and staff use one connected workspace for members, claims, schedules, and collections.
-                Access is role-based so each team sees only the tools they need.
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-white/85">
+                Eyabantu Funerals operations workspace — members, claims, funerals, collections, and schedules in one
+                place.
               </p>
             </div>
           </div>
 
-          <div className="relative hidden border-t border-white/10 p-6 lg:block">
-            <div className="mx-auto max-w-xl">
-              <DemoCredentials accounts={DEMO_ACCOUNTS} />
-            </div>
+          <div className="mt-8 hidden lg:block">
+            <DemoCredentials accounts={DEMO_ACCOUNTS} variant="hero" />
           </div>
         </div>
+      </section>
 
-        <div className="relative flex w-full flex-col justify-center bg-gradient-to-b from-white via-sky-50/60 to-white px-4 py-10 sm:px-8 lg:w-[min(520px,100%)] lg:border-l lg:border-sky-200/80 lg:py-12 lg:shadow-[-24px_0_60px_-40px_rgba(10,22,40,0.45)]">
+      {/* Right — login card on light flyer-grey */}
+      <section className="relative flex w-full flex-1 flex-col justify-between px-4 py-8 sm:px-8 lg:w-[42%] lg:px-10 lg:py-10">
+        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
           <div className="mb-6 lg:hidden">
-            <BrandLogo priority maxHeightClass="max-h-16" />
-            <h1 className="mt-3 text-2xl font-semibold text-[var(--brand-ink)]">Staff &amp; owner login</h1>
+            <div className="inline-flex rounded-xl bg-white px-3 py-2 shadow-md ring-1 ring-[#142a55]/10">
+              <BrandLogo priority bare maxHeightClass="max-h-12" />
+            </div>
+            <h1 className="mt-4 text-2xl font-bold text-[#142a55]">Staff &amp; owner login</h1>
           </div>
 
           <LoginForm initialNext={sp.next} />
 
-          <div className="mt-8 rounded-3xl bg-gradient-to-br from-slate-900 to-[#0a1628] p-4 ring-1 ring-slate-800 lg:hidden">
-            <DemoCredentials accounts={DEMO_ACCOUNTS} />
+          <div className="mt-6 lg:hidden">
+            <DemoCredentials accounts={DEMO_ACCOUNTS} variant="compact" />
           </div>
-
-          <p className="mt-8 text-center text-[11px] text-muted">Eyabantu Funerals</p>
         </div>
-      </div>
+
+        {/* Flyer-style navy footer strip */}
+        <footer className="mx-auto mt-8 w-full max-w-md border-t border-[#142a55]/10 pt-6 text-center text-[11px] leading-relaxed text-[#4a5568]">
+          <p className="font-semibold text-[#142a55]">Eyabantu Funerals</p>
+          <p className="mt-1">{CONTACT.fullAddress}</p>
+          <p className="mt-1">
+            {CONTACT.phonePrimary} · {CONTACT.email}
+          </p>
+          <p className="mt-2 text-[10px] text-[#6b7280]">www.eyabantu.co.za · Demo workspace</p>
+        </footer>
+      </section>
     </div>
   );
 }
