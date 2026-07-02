@@ -7,6 +7,7 @@ import type { StaffAccessLevel } from "@prisma/client";
 import { Bell, LogOut, Mail, Menu, Search, Settings, X } from "lucide-react";
 import { logoutAction } from "@/app/actions/auth";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { CrmSidebarLogo } from "@/components/brand/CrmSidebarLogo";
 import {
   getOwnerNavGroups,
   getStaffNavGroups,
@@ -65,7 +66,7 @@ function SidebarNav({
         className="flex items-center border-b border-eyabantu-gold/30 bg-eyabantu-navy px-4 py-4 transition hover:bg-eyabantu-navy/95"
       >
         <span className="flex min-w-0 flex-1 items-center justify-center md:justify-start">
-          <BrandLogo priority maxHeightClass="max-h-11 md:max-h-12" />
+          <CrmSidebarLogo priority maxHeightClass="max-h-11 md:max-h-12" />
         </span>
       </Link>
 
