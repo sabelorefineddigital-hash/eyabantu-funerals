@@ -23,7 +23,10 @@ export default async function ApplicationDetailPage({
 
   const app = await prisma.clientApplication.findFirst({
     where: { id, tenantId: session.tenantId },
-    include: { submittedBy: { select: { firstName: true, lastName: true, email: true } } },
+    include: {
+      submittedBy: { select: { firstName: true, lastName: true, email: true } },
+      member: { select: { id: true, mainMemberName: true, policyNumber: true } },
+    },
   });
 
   if (!app) notFound();
@@ -47,9 +50,20 @@ export default async function ApplicationDetailPage({
       />
 
       {justSubmitted ? (
-        <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-          Application submitted successfully. Reference <strong className="font-mono">{app.reference}</strong>.
-        </p>
+        <div className="space-y-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+          <p>
+            Application submitted successfully. Reference <strong className="font-mono">{app.reference}</strong>.
+          </p>
+          {app.member ? (
+            <p>
+              Member profile created —{" "}
+              <Link href={`/owner/members/${app.member.id}`} className="font-semibold text-emerald-950 underline">
+                {app.member.mainMemberName}
+              </Link>{" "}
+              (policy {app.member.policyNumber ?? "—"}) is now on Members, Policies, and Payments.
+            </p>
+          ) : null}
+        </div>
       ) : null}
 
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

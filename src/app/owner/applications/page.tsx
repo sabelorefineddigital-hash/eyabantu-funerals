@@ -11,7 +11,10 @@ export default async function OwnerApplicationsPage() {
   const applications = await prisma.clientApplication.findMany({
     where: { tenantId: session.tenantId },
     orderBy: { createdAt: "desc" },
-    include: { submittedBy: { select: { firstName: true, lastName: true } } },
+    include: {
+      submittedBy: { select: { firstName: true, lastName: true } },
+      member: { select: { id: true, mainMemberName: true } },
+    },
   });
 
   return (
@@ -38,6 +41,7 @@ export default async function OwnerApplicationsPage() {
               <th className="px-4 py-3">Applicant</th>
               <th className="px-4 py-3">Plan</th>
               <th className="px-4 py-3">Premium</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Submitted</th>
               <th className="px-4 py-3">By</th>
             </tr>
@@ -45,7 +49,7 @@ export default async function OwnerApplicationsPage() {
           <tbody className="divide-y divide-border">
             {applications.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted">
+                <td colSpan={7} className="px-4 py-10 text-center text-sm text-muted">
                   No applications yet.{" "}
                   <Link href="/owner/applications/new" className="font-semibold text-brand hover:underline">
                     Start the first one
@@ -67,6 +71,24 @@ export default async function OwnerApplicationsPage() {
                     </td>
                     <td className="px-4 py-3 text-xs text-muted">{pkg?.title ?? app.packageCode ?? "—"}</td>
                     <td className="px-4 py-3 font-semibold text-[#142a55]">{formatZar(app.totalPremium)}</td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex rounded-full px-2 py-1 text-[10px] font-semibold ${
+                          app.status === "ONBOARDED"
+                            ? "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-100"
+                            : "bg-amber-50 text-amber-900 ring-1 ring-amber-100"
+                        }`}
+                      >
+                        {app.status}
+                      </span>
+                      {app.member ? (
+                        <p className="mt-1 text-[10px] text-muted">
+                          <Link href={`/owner/members/${app.member.id}`} className="font-semibold text-brand hover:underline">
+                            {app.member.mainMemberName}
+                          </Link>
+                        </p>
+                      ) : null}
+                    </td>
                     <td className="px-4 py-3 text-xs text-muted">{app.createdAt.toLocaleDateString("en-ZA")}</td>
                     <td className="px-4 py-3 text-xs text-muted">
                       {app.submittedBy ? `${app.submittedBy.firstName} ${app.submittedBy.lastName}` : "—"}

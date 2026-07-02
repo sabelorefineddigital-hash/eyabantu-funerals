@@ -555,6 +555,15 @@ async function main() {
     ],
   });
 
+  await prisma.clientApplication.update({
+    where: { reference: "APP-2026-0101" },
+    data: { memberId: m1.id, status: "ONBOARDED" },
+  });
+  await prisma.clientApplication.update({
+    where: { reference: "APP-2026-0104" },
+    data: { memberId: m9.id, status: "ONBOARDED" },
+  });
+
   await prisma.underwriterLink.create({
     data: { tenantId: tenant.id, provider: "REDIT_GATEWAY", externalId: "tenant-link-demo-001", isActive: true },
   });

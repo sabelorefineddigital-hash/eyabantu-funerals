@@ -105,6 +105,9 @@ export function OnboardingWizard({ basePath }: Props) {
       }
       if (result.applicationId) {
         router.push(`${basePath}/${result.applicationId}?submitted=1`);
+        router.refresh();
+      } else if (result.error) {
+        setError(result.error);
       }
     });
   }

@@ -5,12 +5,14 @@ import { prisma } from "@/lib/prisma";
 import { getSessionFromCookies } from "@/lib/session";
 import type { OnboardingFormData } from "@/lib/onboarding-form";
 import { getPackageByCode } from "@/lib/eyabantu-packages";
+import { onboardMemberFromClientApplication } from "@/lib/onboard-from-application";
 
 export type SubmitOnboardingState = {
   error?: string;
   success?: boolean;
   reference?: string;
   applicationId?: string;
+  memberId?: string;
 };
 
 function calcTotalPremium(data: OnboardingFormData): number {
@@ -23,6 +25,19 @@ function calcTotalPremium(data: OnboardingFormData): number {
 function makeReference() {
   const stamp = Date.now().toString(36).toUpperCase();
   return `APP-${stamp.slice(-8)}`;
+}
+
+function revalidateOnboardingPaths() {
+  revalidatePath("/owner/applications");
+  revalidatePath("/staff/applications");
+  revalidatePath("/owner/members");
+  revalidatePath("/staff/members");
+  revalidatePath("/owner/policies");
+  revalidatePath("/staff/policies");
+  revalidatePath("/owner/payments");
+  revalidatePath("/owner/accounts");
+  revalidatePath("/owner");
+  revalidatePath("/staff");
 }
 
 export async function submitOnboardingApplication(
@@ -55,51 +70,78 @@ export async function submitOnboardingApplication(
     return { error: "Please type your full name as your digital signature." };
   }
 
+  const idNumber = data.principal.idNumber.trim();
+  if (idNumber) {
+    const existingMember = await prisma.member.findFirst({
+      where: { tenantId: session.tenantId, idNumber },
+    });
+    if (existingMember) {
+      return {
+        error: `A member with ID number ${idNumber} is already on file (${existingMember.mainMemberName}).`,
+      };
+    }
+  }
+
   const totalPremium = calcTotalPremium(data);
   const extendedPremium = data.dependants.reduce((sum, d) => sum + (parseFloat(d.premiumAmount) || 0), 0);
   const reference = makeReference();
 
-  const row = await prisma.clientApplication.create({
-    data: {
+  try {
+    const row = await prisma.clientApplication.create({
+      data: {
+        tenantId: session.tenantId,
+        submittedById: session.sub,
+        reference,
+        status: "SUBMITTED",
+        surname: data.principal.surname.trim(),
+        firstName: data.principal.firstName.trim(),
+        idNumber: idNumber || null,
+        employeeNumber: data.principal.employeeNumber.trim() || null,
+        employerName: data.principal.employerName.trim() || null,
+        maritalStatus: data.principal.maritalStatus || null,
+        email: data.principal.email.trim() || null,
+        cellphone: data.principal.cellphone.trim() || null,
+        address: data.principal.address.trim() || null,
+        addressCode: data.principal.addressCode.trim() || null,
+        inceptionDate: data.principal.inceptionDate ? new Date(data.principal.inceptionDate) : null,
+        groupBranch: data.principal.groupBranch.trim() || null,
+        packageCode: data.packageCode,
+        addonCodes: JSON.stringify(data.addonCodes),
+        extendedPremium,
+        totalPremium,
+        accountHolder: data.banking.accountHolder.trim() || null,
+        accountNumber: data.banking.accountNumber.trim() || null,
+        bankName: data.banking.bankName.trim() || null,
+        branchName: data.banking.branchName.trim() || null,
+        branchCode: data.banking.branchCode.trim() || null,
+        accountType: data.banking.accountType || null,
+        debitDay: data.banking.debitDay || null,
+        spousesJson: JSON.stringify(data.spouses),
+        dependantsJson: JSON.stringify(data.dependants),
+        beneficiariesJson: JSON.stringify(data.beneficiaries),
+        declarationAccepted: data.declarationAccepted,
+        popiaAccepted: data.popiaAccepted,
+        signatureName: data.signatureName.trim(),
+        signedAt: new Date(),
+      },
+    });
+
+    const onboarded = await onboardMemberFromClientApplication({
+      applicationId: row.id,
       tenantId: session.tenantId,
-      submittedById: session.sub,
-      reference,
-      status: "SUBMITTED",
-      surname: data.principal.surname.trim(),
-      firstName: data.principal.firstName.trim(),
-      idNumber: data.principal.idNumber.trim() || null,
-      employeeNumber: data.principal.employeeNumber.trim() || null,
-      employerName: data.principal.employerName.trim() || null,
-      maritalStatus: data.principal.maritalStatus || null,
-      email: data.principal.email.trim() || null,
-      cellphone: data.principal.cellphone.trim() || null,
-      address: data.principal.address.trim() || null,
-      addressCode: data.principal.addressCode.trim() || null,
-      inceptionDate: data.principal.inceptionDate ? new Date(data.principal.inceptionDate) : null,
-      groupBranch: data.principal.groupBranch.trim() || null,
-      packageCode: data.packageCode,
-      addonCodes: JSON.stringify(data.addonCodes),
-      extendedPremium,
-      totalPremium,
-      accountHolder: data.banking.accountHolder.trim() || null,
-      accountNumber: data.banking.accountNumber.trim() || null,
-      bankName: data.banking.bankName.trim() || null,
-      branchName: data.banking.branchName.trim() || null,
-      branchCode: data.banking.branchCode.trim() || null,
-      accountType: data.banking.accountType || null,
-      debitDay: data.banking.debitDay || null,
-      spousesJson: JSON.stringify(data.spouses),
-      dependantsJson: JSON.stringify(data.dependants),
-      beneficiariesJson: JSON.stringify(data.beneficiaries),
-      declarationAccepted: data.declarationAccepted,
-      popiaAccepted: data.popiaAccepted,
-      signatureName: data.signatureName.trim(),
-      signedAt: new Date(),
-    },
-  });
+      submittedByUserId: session.sub,
+    });
 
-  revalidatePath("/owner/applications");
-  revalidatePath("/staff/applications");
+    revalidateOnboardingPaths();
 
-  return { success: true, reference: row.reference, applicationId: row.id };
+    return {
+      success: true,
+      reference: row.reference,
+      applicationId: row.id,
+      memberId: onboarded.memberId,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Could not save the application. Please try again.";
+    return { error: message };
+  }
 }
