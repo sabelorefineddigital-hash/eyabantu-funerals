@@ -10,7 +10,8 @@ type Props = {
 };
 
 /**
- * CRM sidebar logo — clips the PNG's baked-in "FUNERALS" and renders white text only.
+ * CRM sidebar logo — hides the PNG's baked-in "FUNERALS" with a navy mask,
+ * then renders a single white "FUNERALS" label.
  */
 export function CrmSidebarLogo({
   className = "",
@@ -18,24 +19,32 @@ export function CrmSidebarLogo({
   priority = false,
 }: Props) {
   return (
-    <div className={`relative inline-flex items-end ${className}`}>
-      <Image
-        src="/branding/logo.png"
-        alt="Eyabantu Funerals"
-        width={LOGO_WIDTH}
-        height={LOGO_HEIGHT}
-        priority={priority}
-        unoptimized
-        className={`h-auto w-auto max-w-full object-contain object-left ${maxHeightClass} [clip-path:inset(0_0_21%_0)]`}
-        sizes="(max-width: 768px) 200px, 240px"
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute font-sans text-[7.5px] font-bold uppercase tracking-[0.38em] text-white md:text-[8.5px]"
-        style={{ bottom: "2%", right: "5%" }}
-      >
-        FUNERALS
-      </span>
+    <div className={`relative w-full max-w-[210px] ${maxHeightClass} ${className}`}>
+      <div className={`relative h-full w-full ${maxHeightClass}`}>
+        <Image
+          src="/branding/logo.png"
+          alt="Eyabantu Funerals"
+          width={LOGO_WIDTH}
+          height={LOGO_HEIGHT}
+          priority={priority}
+          unoptimized
+          className="h-full w-auto max-w-full object-contain object-left"
+          sizes="(max-width: 768px) 200px, 210px"
+        />
+        {/* Mask the baked-in FUNERALS (and logo black strip) on the text side only */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 left-[34%] right-0 bg-eyabantu-navy"
+          style={{ height: "38%" }}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute font-sans text-[7px] font-bold uppercase leading-none tracking-[0.44em] text-white md:text-[8px]"
+          style={{ bottom: "13%", right: "2%" }}
+        >
+          FUNERALS
+        </span>
+      </div>
     </div>
   );
 }
