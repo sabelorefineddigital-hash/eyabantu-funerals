@@ -10,8 +10,7 @@ type Props = {
 };
 
 /**
- * CRM sidebar logo — same mark as the brand PNG, but with white "FUNERALS"
- * on the navy dashboard sidebar only.
+ * CRM sidebar logo — clips the PNG's baked-in "FUNERALS" and renders white text only.
  */
 export function CrmSidebarLogo({
   className = "",
@@ -19,7 +18,7 @@ export function CrmSidebarLogo({
   priority = false,
 }: Props) {
   return (
-    <div className={`relative inline-flex items-center ${className}`}>
+    <div className={`relative inline-flex items-end ${className}`}>
       <Image
         src="/branding/logo.png"
         alt="Eyabantu Funerals"
@@ -27,19 +26,13 @@ export function CrmSidebarLogo({
         height={LOGO_HEIGHT}
         priority={priority}
         unoptimized
-        className={`h-auto w-auto max-w-full object-contain object-left ${maxHeightClass}`}
+        className={`h-auto w-auto max-w-full object-contain object-left ${maxHeightClass} [clip-path:inset(0_0_21%_0)]`}
         sizes="(max-width: 768px) 200px, 240px"
       />
-      {/* Cover the navy "FUNERALS" baked into the PNG */}
       <span
         aria-hidden
-        className="pointer-events-none absolute bg-eyabantu-navy"
-        style={{ bottom: "7%", right: "0.5%", width: "50%", height: "24%" }}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute font-sans text-[7px] font-bold uppercase tracking-[0.36em] text-white md:text-[8px]"
-        style={{ bottom: "12%", right: "5.5%" }}
+        className="pointer-events-none absolute font-sans text-[7.5px] font-bold uppercase tracking-[0.38em] text-white md:text-[8.5px]"
+        style={{ bottom: "2%", right: "5%" }}
       >
         FUNERALS
       </span>
